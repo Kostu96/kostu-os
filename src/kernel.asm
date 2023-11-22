@@ -15,5 +15,5 @@ test_string: db 'Test', 0xD, 0xA, 0
 
 		%include 'prints.asm'
 
-; Second sector padding:
+; Sector padding:
 		times 512 - ($ - $$) db 0
