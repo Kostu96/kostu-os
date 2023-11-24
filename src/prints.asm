@@ -45,4 +45,4 @@ _print_hex_store:
 		pop di
 		pop bx
 		ret
-_print_hex_str: db '0x0000', 0
+_print_hex_str: db "0x0000", 0

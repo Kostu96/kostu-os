@@ -11,9 +11,9 @@
 
 		hlt
 
-test_string: db 'Test', 0xD, 0xA, 0
+test_string: db "Test", 0xD, 0xA, 0
 
-		%include 'prints.asm'
+		%include "prints.asm"
 
 ; Sector padding:
 		times 512 - ($ - $$) db 0
