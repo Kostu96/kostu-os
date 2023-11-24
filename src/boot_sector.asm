@@ -3,7 +3,7 @@
 ;
 ; SPDX-License-Identifier: MIT
 ;
-
+		[bits 16]
 		[org 0x7C00]
 		KERNEL_OFFSET equ 0x9000
 
