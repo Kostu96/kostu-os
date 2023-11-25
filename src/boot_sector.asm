@@ -3,61 +3,58 @@
 ;
 ; SPDX-License-Identifier: MIT
 ;
-		[bits 16]
-		[org 0x7C00]
-		KERNEL_OFFSET equ 0x9000
+
+KERNEL_OFFSET equ 0x1000
+
+[bits 16]
+[org 0x7C00]
 
 		mov [BOOT_DRIVE], dl ; BIOS stores our boot drive in dl
 		
-		; Setup stack
-		mov bp, 0x8000
+		mov bp, 0x9000
 		mov sp, bp
 
-		mov ax, 0x0003
-		int 0x10 ; Set video mode
+		mov bx, BOOTLOADER_MSG
+		call print_str
 
 		; Load additional sectors:
-		mov dh, 5 ; load 5 sectors
+		mov dh, 9 ; load 9 sectors
 		mov dl, [BOOT_DRIVE]
 		mov bx, KERNEL_OFFSET
 		mov es, bx
 		xor bx, bx
 		call disk_load
 
-		mov ax, KERNEL_OFFSET
-		mov ss, ax
+		cli ; disable interrupts before PROTECTED MODE switch
+		lgdt [gdt_descriptor]
+		mov eax, cr0
+		or eax, 0x1
+		mov cr0, eax
+		jmp CODE_SEG:protected_mode_start
+		
+		hlt
+
+%include "bios_routines.asm"
+
+		[bits 32]
+protected_mode_start:
+		mov ax, DATA_SEG
 		mov ds, ax
+		mov ss, ax
 		mov es, ax
 		mov fs, ax
 		mov gs, ax
-		
-		jmp KERNEL_OFFSET:0
+		mov ebp, 0x90000
+		mov esp, ebp
 
-; Load dh sectors after boot sector from dl drive to es:bx:
-disk_load:
-		push dx
+		call KERNEL_OFFSET
 
-		mov ah, 0x2
-		mov al, dh
-		mov cx, 0x0002
-		mov dh, 0 ; Start from cylider 0, head 0, sector 2
-		int 0x13
-		jc _disk_load_error
-		pop dx
-		cmp dh, al
-		jne _disk_load_error
-		ret
-
-_disk_load_error:
-		mov bx, _disk_load_err_msg
-		call print_str
 		hlt
 
-_disk_load_err_msg: db "Disk load error!", 0
-
 BOOT_DRIVE: db 0
+BOOTLOADER_MSG: db "Starting bootloader...", 0xD, 0xA, 0
 
-		%include "prints.asm"
+%include "gdt.asm"
 
 		; BIOS magic number:
 		times 510 - ($ - $$) db 0

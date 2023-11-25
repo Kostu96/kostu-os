@@ -13,7 +13,7 @@
 
 test_string: db "Test", 0xD, 0xA, 0
 
-		%include "prints.asm"
+		%include "bios_routines.asm"
 
 ; Sector padding:
 		times 512 - ($ - $$) db 0
