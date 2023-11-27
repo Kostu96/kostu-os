@@ -20,9 +20,9 @@ KERNEL_OFFSET equ 0x1000
 		; Load additional sectors:
 		mov dh, 2 ; number of sectors
 		mov dl, [BOOT_DRIVE]
-		mov bx, KERNEL_OFFSET
-		mov es, bx
 		xor bx, bx
+		mov es, bx
+		mov bx, KERNEL_OFFSET
 		call disk_load
 
 		mov bx, BOOTLOADER_MSG2
@@ -62,8 +62,8 @@ protected_mode_start:
 
 BOOT_DRIVE: db 0
 BOOTLOADER_MSG1: db "Starting bootloader...", 0xD, 0xA, 0
-BOOTLOADER_MSG2: db "Finished loading additional sectorsy.", 0xD, 0xA, 0
-BOOTLOADER_MSG3: db "Starting executing in PROTECTED MODE.", 0xD, 0xA, 0
+BOOTLOADER_MSG2: db "Finished loading additional sectors.", 0xD, 0xA, 0
+BOOTLOADER_MSG3: db "Starting executing in PROTECTED MODE.", 0
 
 		; BIOS magic number:
 		times 510 - ($ - $$) db 0
