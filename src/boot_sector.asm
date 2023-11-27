@@ -14,16 +14,19 @@ KERNEL_OFFSET equ 0x1000
 		mov bp, 0x9000
 		mov sp, bp
 
-		mov bx, BOOTLOADER_MSG
+		mov bx, BOOTLOADER_MSG1
 		call print_str
 
 		; Load additional sectors:
-		mov dh, 9 ; load 9 sectors
+		mov dh, 1
 		mov dl, [BOOT_DRIVE]
 		mov bx, KERNEL_OFFSET
 		mov es, bx
 		xor bx, bx
 		call disk_load
+
+		mov bx, BOOTLOADER_MSG2
+		call print_str
 
 		cli ; disable interrupts before PROTECTED MODE switch
 		lgdt [gdt_descriptor]
@@ -32,7 +35,7 @@ KERNEL_OFFSET equ 0x1000
 		mov cr0, eax
 		jmp CODE_SEG:protected_mode_start
 		
-		hlt
+		jmp $
 
 %include "bios_routines.asm"
 
@@ -47,12 +50,19 @@ protected_mode_start:
 		mov ebp, 0x90000
 		mov esp, ebp
 
+		mov ebx, BOOTLOADER_MSG3
+		call print_string_pm
+
 		call KERNEL_OFFSET
 
-		hlt
+		jmp $
+
+%include "print_str_pm.asm"
 
 BOOT_DRIVE: db 0
-BOOTLOADER_MSG: db "Starting bootloader...", 0xD, 0xA, 0
+BOOTLOADER_MSG1: db "Starting bootloader...", 0xD, 0xA, 0
+BOOTLOADER_MSG2: db "Finished loading additional sectorsy.", 0xD, 0xA, 0
+BOOTLOADER_MSG3: db "Starting executing in PROTECTED MODE.", 0xD, 0xA, 0
 
 %include "gdt.asm"
 

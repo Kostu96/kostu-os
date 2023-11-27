@@ -8,4 +8,4 @@
 [extern kmain]
 
         call kmain
-        hlt
+        jmp $
