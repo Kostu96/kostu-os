@@ -11,7 +11,7 @@ WHITE_ON_BLACK equ 0x0F
 
 ; prints a null-terminated string pointed by EBX
 print_string_pm:
-pusha
+        pusha
         mov edx, VIDEO_MEMORY ; Set edx to the start of vid mem.
 _print_str_pm_loop:
         mov al, [ebx] ; Store the char at EBX in AL

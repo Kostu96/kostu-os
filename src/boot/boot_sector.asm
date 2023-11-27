@@ -18,7 +18,7 @@ KERNEL_OFFSET equ 0x1000
 		call print_str
 
 		; Load additional sectors:
-		mov dh, 1
+		mov dh, 2 ; number of sectors
 		mov dl, [BOOT_DRIVE]
 		mov bx, KERNEL_OFFSET
 		mov es, bx
@@ -38,6 +38,7 @@ KERNEL_OFFSET equ 0x1000
 		jmp $
 
 %include "bios_routines.asm"
+%include "gdt.asm"
 
 		[bits 32]
 protected_mode_start:
@@ -63,8 +64,6 @@ BOOT_DRIVE: db 0
 BOOTLOADER_MSG1: db "Starting bootloader...", 0xD, 0xA, 0
 BOOTLOADER_MSG2: db "Finished loading additional sectorsy.", 0xD, 0xA, 0
 BOOTLOADER_MSG3: db "Starting executing in PROTECTED MODE.", 0xD, 0xA, 0
-
-%include "gdt.asm"
 
 		; BIOS magic number:
 		times 510 - ($ - $$) db 0

@@ -11,19 +11,26 @@
 CC = ${HOME}/opt/cross/bin/i686-elf-gcc
 LD = ${HOME}/opt/cross/bin/i686-elf-ld
 
+C_SOURCES = $(wildcard src/kernel/*.c)
+C_OBJS = ${C_SOURCES:%.c=build/%.o}
+
 all: os.bin
 
 os.bin: build/boot_sector.bin build/kernel.bin
 	cat $^ > build/$@
 
-build/boot_sector.bin: src/boot_sector.asm
-	nasm $< -f bin -o $@ -I src
+build/boot_sector.bin: src/boot/boot_sector.asm
+	nasm $< -f bin -o $@ -I src/boot
 
-build/kernel.bin: build/kernel_entry.o build/kernel.o
+build/kernel.bin: build/kernel_entry.o ${C_OBJS}
 	${LD} -o $@ -Ttext 0x1000 $^ --oformat=binary
 
-build/kernel_entry.o: src/kernel_entry.asm
+build/kernel_entry.o: src/kernel/kernel_entry.asm
 	nasm $< -f elf -o $@
 
-build/kernel.o: src/kernel.c
+%.o: %.c
 	${CC} -ffreestanding -c $< -o $@
+
+clean:
+	rm -rf build
+	mkdir build
