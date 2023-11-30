@@ -16,14 +16,19 @@ C_OBJS = ${C_SOURCES:%.c=./build/%.o}
 
 all: os.bin
 
-os.bin: build/boot_sector.bin build/kernel.bin
+os.bin: build/boot_sector.bin build/file_system.bin build/kernel.bin
 	cat $^ > build/$@
 
 build/boot_sector.bin: src/boot/boot_sector.asm
 	nasm $< -f bin -o $@ -I src/boot
 
+build/file_system.bin: src/file_system.asm
+	nasm $< -f bin -o $@
+
 build/kernel.bin: build/kernel_entry.o ${C_OBJS}
 	${LD} -o $@ -Ttext 0x1000 $^ --oformat=binary
+	@size=$$(($$(wc -c < $@)));\
+	echo "$$size ($$(printf '0x%02X' $$((size))))";
 
 build/kernel_entry.o: src/kernel/kernel_entry.asm
 	nasm $< -f elf -o $@ -I src/boot

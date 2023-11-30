@@ -4,6 +4,12 @@
 ; SPDX-License-Identifier: MIT
 ;
 
+; Clears screen
+cls:
+	mov ax, 0x0003
+	int 0x10
+	ret
+
 ; Prints null terminated string pointed by bx into tty
 print_str:
 		push bx
@@ -50,7 +56,6 @@ _print_hex_str: db "0x0000", 0
 ; Load dh sectors after boot sector from dl drive to es:bx:
 disk_load:
 		push dx
-
 		mov ah, 0x2
 		mov al, dh
 		mov cx, 0x0002
