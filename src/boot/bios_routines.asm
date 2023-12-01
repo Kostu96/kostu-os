@@ -4,12 +4,6 @@
 ; SPDX-License-Identifier: MIT
 ;
 
-; Clears screen
-cls:
-	mov ax, 0x0003
-	int 0x10
-	ret
-
 ; Prints null terminated string pointed by bx into tty
 print_str:
 		push bx
@@ -29,12 +23,12 @@ _print_str_end:
 print_hex:
 		push bx
 		push di
-		mov di, _print_hex_str + 5
+		mov di, _print_hex_str + 3
 _print_hex_start:
 		mov ax, bx
 		shr bx, 4
 		and ax, 0xF
-		cmp al, 9
+		cmp al, 10
 		jnc _print_hex_AF
 		add al, '0'
 		jmp _print_hex_store
@@ -51,14 +45,13 @@ _print_hex_store:
 		pop di
 		pop bx
 		ret
-_print_hex_str: db "0x0000", 0
+_print_hex_str: db "0000h", 0
 
-; Load dh sectors after boot sector from dl drive to es:bx:
+; Load dh sectors starting form cx sector from dl drive to es:bx:
 disk_load:
 		push dx
 		mov ah, 0x2
 		mov al, dh
-		mov cx, 0x0002
 		mov dh, 0 ; Start from cylider 0, head 0, sector 2
 		int 0x13
 		jc _disk_load_error
@@ -72,4 +65,4 @@ _disk_load_error:
 		call print_str
 		hlt
 
-_disk_load_err_msg: db "Disk load error!", 0xD, 0xA, 0
+_disk_load_err_msg: db "dskld err", 0xD, 0xA, 0

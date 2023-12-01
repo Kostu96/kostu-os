@@ -5,8 +5,11 @@
 - Linux or WSL
 - Nasm
 
+## Setup
+```./scripts/setup.sh```
+
 ## Build
-```./scripts/build.sh```
+```make```
 
 ## Run emulation
 ```bochs -q```

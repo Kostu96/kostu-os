@@ -9,6 +9,8 @@
 ; Sector is 512 B
 ; Cluster is 1 sector
 
+; ROOT takes 7 sectors
+
 ; Dir entry:
 ; bytes:    desc.:
 ; 0-7       filename
@@ -17,13 +19,14 @@
 ; 12-13     first cluster
 ; 14-15     size in bytes
 
-; sector 1 - 9:
+; sector 1 - 8:
 FAT:
         dw 0xFFF0 ; reserved cluster 0
         dw 0x0001 ; kernel.bin
 
         times 8 * 512 - ($ - FAT) db 0
 
+; sector 9-15
 ROOT:   
         db "file", 0, 0, 0, 0
         db "txt"
