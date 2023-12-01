@@ -33,7 +33,7 @@ KERNEL_OFFSET equ 0x2000
 		mov bx, FAT_OFFSET
 		call disk_load
 
-		; Find kernel
+		; Find and load kernel
 		mov bx, ROOT_OFFSET
 dir_entry_loop:
 		mov si, bx
@@ -61,9 +61,8 @@ found:
 		mov bx, KERNEL_OFFSET
 		call disk_load
 
-		;hlt
-
-		cli ; disable interrupts before PROTECTED MODE switch
+		; Enter protected mode
+		cli
 		lgdt [gdt_descriptor]
 		mov eax, cr0
 		or eax, 0x1

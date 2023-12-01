@@ -22,18 +22,12 @@
 ; sector 1 - 8:
 FAT:
         dw 0xFFF0 ; reserved cluster 0
-        dw 0x0001 ; kernel.bin
+        dw 0xFFF8 ; kernel.bin
 
         times 8 * 512 - ($ - FAT) db 0
 
 ; sector 9-15
 ROOT:   
-        db "file", 0, 0, 0, 0
-        db "txt"
-        db 0
-        dw 0x0002
-        dw 0
-
         ; kernel.bin:
         db "kernel", 0, 0
         db "bin"
