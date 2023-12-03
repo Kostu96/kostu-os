@@ -11,7 +11,7 @@
 CC = ${HOME}/opt/cross/bin/i686-elf-gcc
 LD = ${HOME}/opt/cross/bin/i686-elf-ld
 
-C_SOURCES = $(wildcard src/kernel/*.c)
+C_SOURCES = $(wildcard src/kernel/*.c src/drivers/*.c)
 C_OBJS = ${C_SOURCES:%.c=./build/%.o}
 
 all: os.bin

@@ -17,13 +17,6 @@ KERNEL_OFFSET equ 0x2000
 		mov bp, 0x9000
 		mov sp, bp
 
-		; clear screen
-		mov ax, 0x0003
-		int 0x10
-
-		mov bx, WELCOME_MSG
-		call print_str
-
 		; Load FAT
 		mov cx, 2 ; start from sector 2
 		mov dh, 15 ; number of sectors
@@ -92,7 +85,6 @@ protected_mode_start:
 %include "print_str_pm.asm"
 
 BOOT_DRIVE: db 0
-WELCOME_MSG: db "Welcome to KostuOS", 0xD, 0xA, 0
 KERNEL_NOT_FOUND_MSG: db "Kernel missing", 0xD, 0xA, 0
 KERNEL_STR: db "kernel", 0, 0, "bin"
 KERNEL_STR_SIZE equ $ - KERNEL_STR

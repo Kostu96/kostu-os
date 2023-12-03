@@ -33,7 +33,7 @@ ROOT:
         db "bin"
         db 0
         dw 0x0001
-        dw 217
+        dw 1105
 
         ; padding
         times 7 * 512 - ($ - ROOT) db 0

@@ -4,8 +4,10 @@
  * SPDX-License-Identifier: MIT
  */
 
+#include "../drivers/screen.h"
+
 void kmain()
 {
-    char* video_memory = (char*)0xB8000;
-    video_memory[0] = 'X';
+    clear_screen();
+    print("Welcome to KostuOS");
 }
