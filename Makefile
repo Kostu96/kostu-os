@@ -26,7 +26,7 @@ build/file_system.bin: src/file_system.asm
 	nasm $< -f bin -o $@
 
 build/kernel.bin: build/kernel_entry.o ${C_OBJS}
-	${LD} -o $@ -Ttext 0x1000 $^ --oformat=binary
+	${LD} -o $@ -Ttext 0x2000 $^ --oformat=binary
 	@size=$$(($$(wc -c < $@)));\
 	echo "$$size ($$(printf '0x%02X' $$((size))))";
 

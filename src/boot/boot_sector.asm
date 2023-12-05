@@ -11,6 +11,9 @@ KERNEL_OFFSET equ 0x2000
 [bits 16]
 [org 0x7C00]
 
+		xor, ax, ax
+		mov ds, ax
+		
 		mov [BOOT_DRIVE], dl ; BIOS stores our boot drive in dl
 		
 		; Setup stack
