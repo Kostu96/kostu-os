@@ -4,8 +4,7 @@
 ; SPDX-License-Identifier: MIT
 ;
 
-FAT_OFFSET equ 0x1000
-ROOT_OFFSET equ FAT_OFFSET + 8 * 512
+ROOT_OFFSET equ 0x1000
 ROOT_END equ ROOT_OFFSET + 7 * 512
 KERNEL_OFFSET equ 0x2000
 
@@ -14,20 +13,22 @@ KERNEL_OFFSET equ 0x2000
 
 		mov [BOOT_DRIVE], dl ; BIOS stores our boot drive in dl
 		
-		mov bp, 0x9000
-		mov sp, bp
+		; Setup stack
+		xor ax, ax
+		mov ss, ax
+		mov sp, 0x9000
 
-		; Load FAT
+		; Load ROOT table
 		mov cx, 2 ; start from sector 2
-		mov dh, 15 ; number of sectors
+		mov dh, 7 ; number of sectors
 		mov dl, [BOOT_DRIVE]
 		xor bx, bx
 		mov es, bx
-		mov bx, FAT_OFFSET
+		mov bx, ROOT_OFFSET
 		call disk_load
 
 		; Find and load kernel
-		mov bx, ROOT_OFFSET
+		; ROOT_OFFSET should still be in bx
 dir_entry_loop:
 		mov si, bx
 		mov di, KERNEL_STR
@@ -43,7 +44,7 @@ dir_entry_loop:
 		hlt
 found:
 		mov cx, [si + 1]
-		add cx, 15 + 1 ; offset to the beginning of data
+		add cx, 7 + 1 ; offset to the beginning of data
 		mov ax, [si + 3]
 		shr ax, 9
 		inc ax

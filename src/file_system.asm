@@ -19,21 +19,14 @@
 ; 12-13     first cluster
 ; 14-15     size in bytes
 
-; sector 1 - 8:
-FAT:
-        dw 0xFFF0 ; reserved cluster 0
-        dw 0xFFF8 ; kernel.bin
-
-        times 8 * 512 - ($ - FAT) db 0
-
-; sector 9-15
+; sector 2 - 8:
 ROOT:   
         ; kernel.bin:
         db "kernel", 0, 0
         db "bin"
         db 0
         dw 0x0001
-        dw 1105
+        dw 5224
 
         ; padding
         times 7 * 512 - ($ - ROOT) db 0

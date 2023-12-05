@@ -35,7 +35,7 @@ build/kernel_entry.o: src/kernel/kernel_entry.asm
 
 ./build/%.o: %.c
 	mkdir -p $(dir $@)
-	${CC} -ffreestanding -c $< -o $@
+	${CC} -ffreestanding -m32 -c $< -o $@
 
 clean:
 	rm -rf build

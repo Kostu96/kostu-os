@@ -16,3 +16,7 @@
 
 void print(char *message);
 void clear_screen();
+
+void print_at(char *message, int col, int row);
+
+void print_char(char character, int col, int row, char attribute_byte);
