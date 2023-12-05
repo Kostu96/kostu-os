@@ -62,8 +62,6 @@ found:
 		or eax, 0x1
 		mov cr0, eax
 		jmp CODE_SEG:protected_mode_start
-		
-		jmp $
 
 %include "bios_routines.asm"
 %include "gdt.asm"
@@ -79,9 +77,7 @@ protected_mode_start:
 		mov ebp, 0x90000
 		mov esp, ebp
 
-		call KERNEL_OFFSET
-
-		jmp $
+		jmp KERNEL_OFFSET
 
 %include "print_str_pm.asm"
 
