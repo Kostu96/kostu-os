@@ -11,9 +11,9 @@ KERNEL_OFFSET equ 0x2000
 [bits 16]
 [org 0x7C00]
 
-		xor, ax, ax
+		xor ax, ax
 		mov ds, ax
-		
+
 		mov [BOOT_DRIVE], dl ; BIOS stores our boot drive in dl
 		
 		; Setup stack
@@ -66,8 +66,8 @@ found:
 		mov cr0, eax
 		jmp CODE_SEG:protected_mode_start
 
-%include "bios_routines.asm"
-%include "gdt.asm"
+%include "bios_routines.inc"
+%include "gdt.inc"
 
 		[bits 32]
 protected_mode_start:
@@ -81,8 +81,6 @@ protected_mode_start:
 		mov esp, ebp
 
 		jmp KERNEL_OFFSET
-
-%include "print_str_pm.asm"
 
 BOOT_DRIVE: db 0
 KERNEL_NOT_FOUND_MSG: db "Kernel missing", 0xD, 0xA, 0
